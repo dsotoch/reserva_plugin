@@ -1,0 +1,27 @@
+#tabla_reservalo thead tr th{
+        background-color: blue;
+        color: white;
+        font-weight: bold;
+}
+#input_buscar_reservalo {
+    padding: 10px;
+    width: 50%;
+}
+#btn_buscar_reservalo{
+    padding: 10px;
+    
+}
+
+.woocommerce-billing-fields,
+.woocommerce-shipping-fields,
+.woocommerce-additional-fields,
+.woocommerce-checkout #order_review_heading {
+    display: none !important;
+}
+
+.woocommerce-checkout #checkout_coupon,
+.woocommerce-form-coupon-toggle {
+    display: none !important;
+}
+
+
