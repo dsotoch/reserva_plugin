@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/*
 function mostrar_metodos_pago_dentro_formulario($content)
 {
     $pagina_id = intval(get_option('reservalo_id_select_paginas', 0)); // ID de la página configurada
@@ -31,7 +32,7 @@ function mostrar_metodos_pago_dentro_formulario($content)
 
 add_filter('the_content', 'mostrar_metodos_pago_dentro_formulario');
 
-
+*/
 
 function cambiar_texto_boton_finalizar_pedido($text)
 {
@@ -134,7 +135,17 @@ function reservalo_registrar_pedido_en_bd($order_id)
 }
 
 
+// Cambiar el email y nombre del remitente temporalmente
+add_filter('wp_mail_from', 'personalizar_remitente_email');
+add_filter('wp_mail_from_name', 'personalizar_remitente_nombre');
 
+function personalizar_remitente_email($original_email_address) {
+    return 'habilitate@habilitate.pe'; 
+}
+
+function personalizar_remitente_nombre($original_email_from) {
+    return 'Habilitate Rehabilitación'; 
+}
 function enviar_email_personalizado_tras_pago($order_id) {
     if (!$order_id) {
         return;

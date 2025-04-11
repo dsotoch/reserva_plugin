@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const reservalo_form_cita = document.querySelector(`#${objeto_ajax.id_formulario}`);
     const nombre = document.querySelector(`#${objeto_ajax.id_servicio}`);
+    reservalo_form_cita.querySelector('button').disabled = true;
 
 
     function buscarPrecio() {
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 } else {
                     precio = '';
-                    mostrar_ocultar_checkout(false);
+                    mostrar_ocultar_checkout();
                     document.getElementById(`${objeto_ajax.id_precio}`).value = '';
                     alert("Producto no encontrado");
                 }
@@ -99,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (reservalo_form_cita) {
-        reservalo_form_cita.querySelector('button').disabled = true;
         reservalo_form_cita.addEventListener('submit', (e) => {
             e.preventDefault();
             let datosCliente = {
@@ -116,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
             nombre.disabled = true;
-            reservalo_form_cita.querySelector('button').disabled = true;
             mostrar_ocultar_checkout();
             actualizar_valores_pedido();
         });
@@ -144,12 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function mostrar_ocultar_checkout() {
         const checkout = jQuery("#checkout-oculto");
 
-        if (checkout.length) {
-
+            
             checkout.slideDown();
-
-        }
+        
     }
+
 
 
 

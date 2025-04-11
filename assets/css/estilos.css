@@ -16,7 +16,7 @@
 .woocommerce-shipping-fields,
 .woocommerce-additional-fields,
 .woocommerce-checkout #order_review_heading {
-    display: none !important;
+   /* display: none !important;*/
 }
 
 .woocommerce-checkout #checkout_coupon,
@@ -24,4 +24,6 @@
     display: none !important;
 }
 
-
+.loader{
+    display: none !important;
+}
