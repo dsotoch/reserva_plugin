@@ -72,8 +72,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const reservalo_form_cita = document.querySelector(`#${objeto_ajax.id_formulario}`);
+    if (reservalo_form_cita) {
+        reservalo_form_cita.querySelector('button').disabled = true;
+
+    }
+
     const nombre = document.querySelector(`#${objeto_ajax.id_servicio}`);
-    reservalo_form_cita.querySelector('button').disabled = true;
 
 
     function buscarPrecio() {
@@ -159,54 +163,65 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 300); // Verifica cada 300ms
     }
 
-   
+
     function mostrar_ocultar_checkout() {
         const checkout = jQuery("#checkout-oculto");
-    
+
         // Mostrar contenedor si está oculto
         checkout.slideDown('slow', function () {
             // Esperar a que WooCommerce haya renderizado los campos (importante si cargaste por AJAX)
             setTimeout(() => {
                 const $departamento = jQuery('#billing_departamento');
-    
+
                 if ($departamento.length && $departamento.find('option').length > 1) {
                     // Seleccionar segundo valor (index 1)
                     $departamento.val($departamento.find('option').eq(1).val()).trigger('change');
-    
+
                     // Seleccionar provincia cuando esté lista
                     seleccionarSegundoValorCuandoEsteListo('#billing_provincia');
-    
+
                     // Seleccionar distrito con delay para asegurar que provincia haya cargado por AJAX
                     setTimeout(() => {
                         seleccionarSegundoValorCuandoEsteListo('#billing_distrito');
                     }, 1000);
-    
+
                     // Ocultar campos personalizados si aplica
                     jQuery('.woocommerce-billing-fields').addClass('ocultar-campos');
                 }
-    
+
                 // Refrescar fragmentos de WooCommerce si es necesario (por AJAX o métodos de pago como Openpay)
                 jQuery(document.body).trigger('updated_checkout');
-    
+
             }, 300); // Delay leve para asegurar que los campos se hayan renderizado completamente
         });
     }
-    
+
     jQuery(document).ready(function () {
         const isReservarCita = window.location.pathname.includes('/reservar-cita');
+        console.log("¿Está en /reservar-cita? =>", isReservarCita);
     
-        if (isReservarCita && !localStorage.getItem('reservarCitaRecargada')) {
-            // Marcar como recargada para no volver a hacerlo
-            localStorage.setItem('reservarCitaRecargada', 'true');
-            
-            // Recargar la página una sola vez
-            location.reload();
+        if (isReservarCita && !sessionStorage.getItem('reservarCitaRecargada')) {
+            console.log("Marcando como recargada...");
+            sessionStorage.setItem('reservarCitaRecargada', 'true');
+    
+            setTimeout(() => {
+                console.log("Recargando página...");
+                location.reload();
+            }, 500);
+        }
+    
+        // Limpiar la bandera solo si estamos en otra ruta
+        if (!isReservarCita && sessionStorage.getItem('reservarCitaRecargada')) {
+            sessionStorage.removeItem('reservarCitaRecargada');
+            console.log("Se limpió la bandera de recarga.");
         }
     });
+    
 
-   
-    
-    
+
+
+
+
 
 
 

@@ -4,13 +4,6 @@ if (!defined('ABSPATH')) {
 }
 
 
-
-
-
-
-
-
-
 function cambiar_texto_boton_finalizar_pedido($text)
 {
     return 'Confirmar y pagar'; // Cambia este texto por el que desees
@@ -161,6 +154,6 @@ function enviar_email_personalizado_tras_pago($order_id) {
     wp_mail($cliente_email, $asunto, $mensaje, $headers);
 }
 
-add_action('woocommerce_order_status_processing', 'enviar_email_personalizado_tras_pago');
 add_action('woocommerce_order_status_completed', 'enviar_email_personalizado_tras_pago');
+
 
