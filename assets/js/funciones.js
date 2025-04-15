@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 } else {
                     precio = '';
-                    mostrar_ocultar_checkout();
                     document.getElementById(`${objeto_ajax.id_precio}`).value = '';
                     alert("Producto no encontrado");
                 }
@@ -140,13 +139,75 @@ document.addEventListener("DOMContentLoaded", function () {
         if (emailCliente) emailCliente.value = datosCliente.email;
     }
 
+    function seleccionarSegundoValorCuandoEsteListo(selector) {
+        const maxIntentos = 10;
+        let intentos = 0;
+
+        const interval = setInterval(function () {
+            const $select = jQuery(selector);
+            const options = $select.find('option');
+
+            if (options.length > 1) {
+                $select.val(options.eq(1).val()).trigger('change');
+                clearInterval(interval);
+            }
+
+            intentos++;
+            if (intentos >= maxIntentos) {
+                clearInterval(interval); // Detener luego de varios intentos
+            }
+        }, 300); // Verifica cada 300ms
+    }
+
+   
     function mostrar_ocultar_checkout() {
         const checkout = jQuery("#checkout-oculto");
-
-            
-            checkout.slideDown();
-        
+    
+        // Mostrar contenedor si está oculto
+        checkout.slideDown('slow', function () {
+            // Esperar a que WooCommerce haya renderizado los campos (importante si cargaste por AJAX)
+            setTimeout(() => {
+                const $departamento = jQuery('#billing_departamento');
+    
+                if ($departamento.length && $departamento.find('option').length > 1) {
+                    // Seleccionar segundo valor (index 1)
+                    $departamento.val($departamento.find('option').eq(1).val()).trigger('change');
+    
+                    // Seleccionar provincia cuando esté lista
+                    seleccionarSegundoValorCuandoEsteListo('#billing_provincia');
+    
+                    // Seleccionar distrito con delay para asegurar que provincia haya cargado por AJAX
+                    setTimeout(() => {
+                        seleccionarSegundoValorCuandoEsteListo('#billing_distrito');
+                    }, 1000);
+    
+                    // Ocultar campos personalizados si aplica
+                    jQuery('.woocommerce-billing-fields').addClass('ocultar-campos');
+                }
+    
+                // Refrescar fragmentos de WooCommerce si es necesario (por AJAX o métodos de pago como Openpay)
+                jQuery(document.body).trigger('updated_checkout');
+    
+            }, 300); // Delay leve para asegurar que los campos se hayan renderizado completamente
+        });
     }
+    
+    jQuery(document).ready(function () {
+        const isReservarCita = window.location.pathname.includes('/reservar-cita');
+    
+        if (isReservarCita && !localStorage.getItem('reservarCitaRecargada')) {
+            // Marcar como recargada para no volver a hacerlo
+            localStorage.setItem('reservarCitaRecargada', 'true');
+            
+            // Recargar la página una sola vez
+            location.reload();
+        }
+    });
+
+   
+    
+    
+
 
 
 
@@ -158,3 +219,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
+

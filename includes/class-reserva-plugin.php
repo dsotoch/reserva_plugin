@@ -3,36 +3,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/*
-function mostrar_metodos_pago_dentro_formulario($content)
-{
-    $pagina_id = intval(get_option('reservalo_id_select_paginas', 0)); // ID de la página configurada
-    $formulario_id = get_option('reservalo_id_formulario', ''); // ID del formulario configurado
 
-    if (is_page($pagina_id) && !empty($formulario_id)) {
-        // Agregamos el checkout oculto dentro del formulario
-        $checkout = '<div id="checkout-oculto" style="display: none;">' . do_shortcode('[woocommerce_checkout]') . '</div>';
-        
-        // Insertamos el checkout DENTRO del formulario con jQuery
-        $script = "<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var formulario = document.querySelector('form[id=\"$formulario_id\"]');
-                if (formulario) {
-                    var checkout = document.getElementById('checkout-oculto');
-                    formulario.appendChild(checkout); // Inserta el checkout dentro del formulario
-                }
-            });
-        </script>";
 
-        return $content . $checkout . $script;
-    }
 
-    return $content;
-}
 
-add_filter('the_content', 'mostrar_metodos_pago_dentro_formulario');
 
-*/
+
+
 
 function cambiar_texto_boton_finalizar_pedido($text)
 {
@@ -48,7 +25,7 @@ function hacer_campos_checkout_opcionales($fields)
     // Valores por defecto para facturación
     $valores_por_defecto_billing = [
         'billing_first_name' => 'Nombre',
-        'billing_last_name' => 'Apellido',
+        'billing_last_name' => '',
         'billing_address_1' => 'Calle  123',
         'billing_city' => 'Ciudad',
         'billing_postcode' => '00000',
@@ -67,7 +44,7 @@ function hacer_campos_checkout_opcionales($fields)
     // Valores por defecto para envío (si usas campos de envío distintos)
     $valores_por_defecto_shipping = [
         'shipping_first_name' => 'Nombre',
-        'shipping_last_name' => 'Apellido',
+        'shipping_last_name' => '',
         'shipping_address_1' => 'Calle Envío 456',
         'shipping_city' => 'Ciudad Envío',
         'shipping_postcode' => '11111',
