@@ -56,9 +56,48 @@ function hacer_campos_checkout_opcionales($fields)
 add_filter('woocommerce_checkout_fields', 'hacer_campos_checkout_opcionales');
 
 
+add_action('template_redirect', 'agregar_primer_producto_por_defecto');
+
+function agregar_primer_producto_por_defecto() {
+    if (is_admin() || is_cart() || is_checkout()) return;
+
+    // Evita que se agregue más de una vez por sesión
+    if (WC()->session->get('producto_agregado_automaticamente')) return;
+
+    // Obtener el primer producto publicado
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => 1,
+        'orderby'        => 'date',
+        'order'          => 'ASC',
+        'post_status'    => 'publish',
+        'fields'         => 'ids',
+    );
+
+    $productos = get_posts($args);
+
+    if (empty($productos)) return; // No hay productos
+
+    $product_id = $productos[0];
+    $found = false;
+
+    // Verifica si ya está en el carrito
+    foreach (WC()->cart->get_cart() as $cart_item) {
+        if ($cart_item['product_id'] == $product_id) {
+            $found = true;
+            break;
+        }
+    }
+
+    // Si no está en el carrito, lo agrega
+    if (!$found) {
+        WC()->cart->add_to_cart($product_id);
+        WC()->session->set('producto_agregado_automaticamente', true);
+    }
+}
 
 
-add_action('woocommerce_thankyou', 'reservalo_registrar_pedido_en_bd');
+add_action('woocommerce_order_status_completed', 'reservalo_registrar_pedido_en_bd');
 
 function reservalo_registrar_pedido_en_bd($order_id)
 {

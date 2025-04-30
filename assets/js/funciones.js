@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     const reservalo_admin_selects = document.querySelectorAll("#reservalo_admin_select");
 
+
     if (reservalo_admin_selects.length > 0) {
         reservalo_admin_selects.forEach(select => {
             select.addEventListener("change", function () {
@@ -163,39 +164,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 300); // Verifica cada 300ms
     }
 
-
-    function mostrar_ocultar_checkout() {
-        const checkout = jQuery("#checkout-oculto");
-
-        // Mostrar contenedor si está oculto
-        checkout.slideDown('slow', function () {
-            // Esperar a que WooCommerce haya renderizado los campos (importante si cargaste por AJAX)
-            setTimeout(() => {
-                const $departamento = jQuery('#billing_departamento');
-
-                if ($departamento.length && $departamento.find('option').length > 1) {
-                    // Seleccionar segundo valor (index 1)
-                    $departamento.val($departamento.find('option').eq(1).val()).trigger('change');
-
-                    // Seleccionar provincia cuando esté lista
-                    seleccionarSegundoValorCuandoEsteListo('#billing_provincia');
-
-                    // Seleccionar distrito con delay para asegurar que provincia haya cargado por AJAX
-                    setTimeout(() => {
-                        seleccionarSegundoValorCuandoEsteListo('#billing_distrito');
-                    }, 1000);
-
-                    // Ocultar campos personalizados si aplica
-                    jQuery('.woocommerce-billing-fields').addClass('ocultar-campos');
-                }
-
-                // Refrescar fragmentos de WooCommerce si es necesario (por AJAX o métodos de pago como Openpay)
-                jQuery(document.body).trigger('updated_checkout');
-
-            }, 300); // Delay leve para asegurar que los campos se hayan renderizado completamente
-        });
-    }
-
     jQuery(document).ready(function () {
         const isReservarCita = window.location.pathname.includes('/reservar-cita');
         console.log("¿Está en /reservar-cita? =>", isReservarCita);
@@ -215,8 +183,48 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.removeItem('reservarCitaRecargada');
             console.log("Se limpió la bandera de recarga.");
         }
+        var checkExist = setInterval(function () {
+            if (jQuery('#checkout-oculto').length) {
+                jQuery('#checkout-oculto').addClass('ocultar-campos');
+                clearInterval(checkExist);
+            }
+        }, 100); // revisa cada 100ms
     });
     
+
+   
+
+    function mostrar_ocultar_checkout() {
+        
+        const checkout = jQuery("#checkout-oculto");
+        checkout.removeClass("ocultar-campos");
+        jQuery('body').trigger('update_checkout');
+
+        setTimeout(() => {
+            const $departamento = jQuery('#billing_departamento');
+
+            if ($departamento.length && $departamento.find('option').length > 1) {
+                // Seleccionar segundo valor (index 1)
+                $departamento.val($departamento.find('option').eq(1).val()).trigger('change');
+
+                // Seleccionar provincia cuando esté lista
+                seleccionarSegundoValorCuandoEsteListo('#billing_provincia');
+
+                // Seleccionar distrito con delay para asegurar que provincia haya cargado por AJAX
+                setTimeout(() => {
+                    seleccionarSegundoValorCuandoEsteListo('#billing_distrito');
+                }, 1000);
+
+
+            }
+
+        }, 300); // Delay leve para asegurar que los campos se hayan renderizado completamente
+        jQuery('.woocommerce-billing-fields').addClass('ocultar-campos');
+
+    }
+
+
+
 
 
 

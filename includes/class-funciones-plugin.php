@@ -4,8 +4,9 @@ function obtener_precio_producto_por_nombre($nombre)
     global $wpdb;
 
     // Vaciar completamente el carrito antes de buscar el producto
-    WC()->cart->empty_cart(true);
-
+    WC()->cart->empty_cart(); // sin true
+    WC()->cart->set_session();
+    
     // Buscar el ID del producto por su nombre
     $producto_id = $wpdb->get_var(
         $wpdb->prepare(

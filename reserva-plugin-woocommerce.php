@@ -4,7 +4,7 @@
  * Plugin Name: Reservalo
  * Plugin URI: https://techubperu.com
  * Description: El plugin Gestión de Reservas y Pagos en WooCommerce facilita la administración de citas y reservas en línea. Permite a los usuarios seleccionar su cita desde un formulario en la misma página donde se muestra el checkout de WooCommerce, simplificando el proceso de pago. Además, incluye opciones avanzadas para filtrar reservas y cambiar su estado según la disponibilidad o confirmación del pago.
- * Version: 1.0
+ * Version: 2.0
  * Author: Diego Soto 
  * Author URI: https://techubperu.com
  * License: GPL v2 or later
